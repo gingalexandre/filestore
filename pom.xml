@@ -1,7 +1,27 @@
-="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>fr.miage.gingalexandre</groupId>
   <artifactId>filestore</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
+  <name>The FileStore Application</name>
+  <organization>
+    <name>Miage Nancy</name>
+    <url>http://www.miage-nancy.fr</url>
+  </organization>
+  <developers>
+    <developer>
+      <id>gingalexandre</id>
+      <name>Alexandre GINGEMBRE</name>
+      <email>alexandre.gingembre5@etu.univ-lorraine.fr</email>
+      <url>https://univ-lorraine.fr</url>
+      <organization>UNIVERSITE DE LORRAINE</organization>
+      <organizationUrl>http://www.univ-lorraine.fr</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>Europe/Paris</timezone>
+    </developer>
+  </developers>
 </project>
