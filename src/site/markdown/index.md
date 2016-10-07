@@ -1,4 +1,5 @@
-# M2 SID 
-## Composants pour Applications d'Entreprise
-### Filestore
-Bonjour, ceci est le TP du cours de M2 SID - Composants pour Applications d'Entreprise
+# Le projet de Miage M2 2015 : filestore
+
+Le projet consiste à écrire une application de partage de fichier en ligne qui sera, à terme, hébergé dans le cloud.
+
+Cette application à pour but de mettre en oeuvre les architecture à composants, les middleware, les web services, les technologies XaaS, le tout dans un environnement de développement piloté par les tests et géré par des outils standard de génie logiciel.

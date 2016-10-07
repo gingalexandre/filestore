@@ -1,4 +1,5 @@
-<h1> M2 SID </h1>
-<h2> Composants pour Applications d'Entreprise </h2>
-<h3> Filestore </h3>
-<p>Bonjour, ceci est le TP du cours de M2 SID - Composants pour Applications d'Entreprise</p>
+# FileStore Miage M2 Project
+
+Ce projet est fait dans le cadre d'un cours JEE en Miage M2 SID.
+
+L'objectif du projet est de mettre en oeuvre les technologies JEE.
