@@ -1,29 +1,19 @@
 package org.filestore.ejb.file;
 
-import org.filestore.ejb.file.entity.FileItem;
 import org.filestore.ejb.store.BinaryStoreService;
-import org.filestore.ejb.store.BinaryStoreServiceException;
-import org.filestore.ejb.store.BinaryStreamNotFoundException;
-import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.RollbackException;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.sql.DriverManager;
 import java.sql.SQLNonTransientConnectionException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 public class FileServiceTest {
 
@@ -35,6 +25,8 @@ public class FileServiceTest {
 
     private static BinaryStoreService store;
     private static Mockery context = new Mockery();
+
+
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -60,6 +52,7 @@ public class FileServiceTest {
 
         store = context.mock(BinaryStoreService.class);
         ((FileServiceBean)service).store = store;
+
     }
 
     @AfterClass
@@ -81,7 +74,7 @@ public class FileServiceTest {
         }
     }
 
-    @Test
+/*    @Test
     public void testPostAndDeleteFile() throws FileServiceException, BinaryStoreServiceException {
 
 
@@ -126,6 +119,6 @@ public class FileServiceTest {
             LOGGER.log(Level.SEVERE, "error during testing file service", e);
             fail("Exception during testing file service");
         }
-    }
+    }*/
 
 }

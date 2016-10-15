@@ -1,6 +1,5 @@
 package org.filestore.ejb.file;
 
-import org.filestore.ejb.config.FileStoreConfig;
 import org.filestore.ejb.file.entity.FileItem;
 import org.filestore.ejb.file.metrics.FileServiceMetricsBean;
 import org.filestore.ejb.store.BinaryStoreService;
@@ -9,22 +8,20 @@ import org.filestore.ejb.store.BinaryStreamNotFoundException;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
+import javax.inject.Inject;
 import javax.interceptor.Interceptors;
-import javax.mail.Message.RecipientType;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import javax.jms.JMSContext;
+import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static java.lang.Thread.sleep;
 
 @Stateless(name = "fileservice")
 @Local(FileService.class)
@@ -40,9 +37,13 @@ public class FileServiceBean implements FileService {
     @EJB
     protected BinaryStoreService store;
 
-    @Resource(name = "java:jboss/mail/Default")
-    private Session session;
 
+    @Resource(mappedName = "java:jboss/exported/jms/topic/Mail")
+    private Topic mailTopic;
+    @Inject
+    private JMSContext jmsctx;
+
+    @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String postFile(String owner, List<String> receivers, String message, String name, byte[] data) throws FileServiceException {
         LOGGER.log(Level.INFO, "Post File called (byte[])");
@@ -58,7 +59,6 @@ public class FileServiceBean implements FileService {
         return id;
     }
 
-    @Asynchronous
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     private String internalPostFile(String owner, List<String> receivers, String message, String name, InputStream stream) throws FileServiceException {
         try {
@@ -73,18 +73,7 @@ public class FileServiceBean implements FileService {
             file.setStream(streamid);
             em.persist(file);
 
-            notifyOwner(owner, id);
-            int i = 0;
-            for ( String receiver : receivers ) {
-                if(i != 10) {
-                    notifyReceiver(receiver, id, message);
-                    i++;
-                }
-                else{
-                    sleep(1000);
-                    i= 0;
-                }
-            }
+            notify(owner, receivers, id, message);
 
             return id;
         } catch ( BinaryStoreServiceException e ) {
@@ -119,7 +108,6 @@ public class FileServiceBean implements FileService {
         LOGGER.log(Level.INFO, "Get File Content called");
         return this.internalGetFileContent(id);
     }
-
 
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public byte[] getWholeFileContent(String id) throws FileServiceException {
@@ -189,7 +177,28 @@ public class FileServiceBean implements FileService {
         }
     }
 
-    private void notifyOwner(String owner, String id) throws MessagingException, UnsupportedEncodingException {
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    private void notify(String owner, List<String> receivers, String id, String message) throws FileServiceException {
+        try {
+            javax.jms.Message msg = jmsctx.createMessage();
+            msg.setStringProperty("owner", owner);
+            StringBuilder receiversBuilder =  new StringBuilder();
+            for ( String receiver : receivers ) {
+                receiversBuilder.append(receiver).append(",");
+            }
+            receiversBuilder.deleteCharAt(receiversBuilder.lastIndexOf(","));
+            msg.setStringProperty("receivers", receiversBuilder.toString());
+            msg.setStringProperty("id", id);
+            msg.setStringProperty("message", message);
+            jmsctx.createProducer().send(mailTopic, msg);
+
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "unable to notify", e);
+            throw new FileServiceException("unable to notify", e);
+        }
+    }
+
+   /* private void notifyOwner(String owner, String id) throws MessagingException, UnsupportedEncodingException {
         javax.mail.Message msg = new MimeMessage(session);
         msg.setSubject("Your file has been received");
         msg.setRecipient(RecipientType.TO,new InternetAddress(owner));
@@ -198,13 +207,13 @@ public class FileServiceBean implements FileService {
                 + FileStoreConfig.getDownloadBaseUrl() + id, "text/html");
         Transport.send(msg);
         try {
-            sleep(5000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             //
         }
-    }
+    }*/
 
-    private void notifyReceiver(String receiver, String id, String message) throws MessagingException, UnsupportedEncodingException {
+  /*  private void notifyReceiver(String receiver, String id, String message) throws MessagingException, UnsupportedEncodingException {
         javax.mail.Message msg = new MimeMessage(session);
         msg.setSubject("Notification");
         msg.setRecipient(RecipientType.TO,new InternetAddress(receiver));
@@ -214,10 +223,67 @@ public class FileServiceBean implements FileService {
                 + "The sender lets you a message :<br/><br/>" + message, "text/html");
         Transport.send(msg);
         try {
-            sleep(5000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             //
         }
+    }*/
+
+
+    /*class OwnerNotifier implements Runnable {
+
+        private String owner;
+        private String id;
+
+        public OwnerNotifier(String owner, String id) {
+            this.owner = owner;
+            this.id = id;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Message msg = new MimeMessage(session);
+                msg.setSubject("Your file has been received");
+                msg.setRecipient(Message.RecipientType.TO,new InternetAddress(owner));
+                msg.setFrom(new InternetAddress("admin@filexchange.org","FileXChange"));
+                msg.setContent("Hi, this mail confirm the upload of your file. The file will be accessible at url : "
+                        + FileStoreConfig.getDownloadBaseUrl() + id, "text/html");
+                Transport.send(msg);
+            } catch ( Exception e ) {
+                LOGGER.log(Level.SEVERE, "unable to notify owner", e);
+            }
+        }
     }
+
+    class ReceiverNotifier implements Runnable {
+
+        private String message;
+        private String owner;
+        private String id;
+
+        public ReceiverNotifier(String owner, String id, String message) {
+            this.owner = owner;
+            this.id = id;
+            this.message = message;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Message msg = new MimeMessage(session);
+                msg.setSubject("Notification");
+                msg.setRecipient(Message.RecipientType.TO,new InternetAddress(owner));
+                msg.setFrom(new InternetAddress("admin@filexchange.org","FileXChange"));
+                msg.setContent("Hi, a file has been uploaded for you and is accessible at url : <br/><br/>"
+                        + FileStoreConfig.getDownloadBaseUrl() + id + "<br/><br/>"
+                        + "The sender lets you a message :<br/><br/>" + message, "text/html");
+                Transport.send(msg);
+            } catch ( Exception e ) {
+                LOGGER.log(Level.SEVERE, "unable to notify owner", e);
+            }
+        }
+    }*/
+
 
 }
