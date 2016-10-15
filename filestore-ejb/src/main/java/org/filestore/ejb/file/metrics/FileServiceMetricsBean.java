@@ -1,7 +1,6 @@
 package org.filestore.ejb.file.metrics;
 
 import org.filestore.ejb.file.FileServiceException;
-import org.filestore.ejb.file.FileServiceMetrics;
 
 import javax.ejb.Local;
 import javax.ejb.Startup;

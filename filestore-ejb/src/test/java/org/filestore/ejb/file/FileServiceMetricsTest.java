@@ -22,7 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.junit.Assert.assertEquals;
-import static org.wildfly.common.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
 public class FileServiceMetricsTest {

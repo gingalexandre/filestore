@@ -3,6 +3,7 @@ package org.filestore.ejb.file;
 import org.filestore.ejb.file.entity.FileItem;
 import org.filestore.ejb.store.BinaryStoreService;
 import org.filestore.ejb.store.BinaryStoreServiceException;
+import org.filestore.ejb.store.BinaryStreamNotFoundException;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.AfterClass;
@@ -119,6 +120,9 @@ public class FileServiceTest {
             em.getTransaction().commit();
         }  catch (IllegalStateException | RollbackException e) {
             em.getTransaction().rollback();
+            LOGGER.log(Level.SEVERE, "error during testing file service", e);
+            fail("Exception during testing file service");
+        } catch (BinaryStreamNotFoundException e) {
             LOGGER.log(Level.SEVERE, "error during testing file service", e);
             fail("Exception during testing file service");
         }
