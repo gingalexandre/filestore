@@ -6,6 +6,17 @@
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/filestore-ear/target/filestore-ear/META-INF/MANIFEST.MF" />
       </element>
+      <element id="archive" name="filestore-ejb.jar">
+        <element id="artifact" artifact-name="filestore-ejb:ejb exploded" />
+      </element>
+      <element id="directory" name="lib">
+        <element id="archive" name="filestore-api.jar">
+          <element id="module-output" name="filestore-api" />
+        </element>
+      </element>
+      <element id="archive" name="filestore-web.war">
+        <element id="artifact" artifact-name="filestore-web:war exploded" />
+      </element>
     </root>
   </artifact>
 </component>

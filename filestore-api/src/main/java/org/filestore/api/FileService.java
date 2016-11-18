@@ -10,10 +10,11 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
-import javax.xml.ws.BindingType;
+import javax.xml.ws.soap.MTOM;
 
 @Remote
 @WebService
+@MTOM(enabled=true)
 @SOAPBinding(style=Style.RPC)
 public interface FileService {
 	
