@@ -1,13 +1,10 @@
-package org.miage.file.store;
+package org.filestore.ejb.file;
 
-import org.filestore.ejb.file.entity.FileItem;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.sql.DriverManager;
 import java.sql.SQLNonTransientConnectionException;
 import java.util.ArrayList;
@@ -15,31 +12,34 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.junit.Assert.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
+import org.filestore.ejb.file.entity.FileItemEntity;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-/**
- * Created by Alexandre on 30/09/2016.
- */
 public class FileItemTest {
 
-    private static Logger LOGGER = Logger.getLogger(FileItemTest.class.getName());
+	private static Logger LOGGER = Logger.getLogger(FileItemTest.class.getName());
 
     private static EntityManagerFactory emFactory;
     private static EntityManager em;
 
     @BeforeClass
     public static void setUp() throws Exception {
-try {
-LOGGER.log(Level.INFO, "Starting memory database for unit tests");
+        try {
+        	LOGGER.log(Level.INFO, "Starting memory database for unit tests");
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             DriverManager.getConnection("jdbc:derby:memory:unit-testing-jpa;create=true").close();
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "unable to start database", e);
+        	LOGGER.log(Level.SEVERE, "unable to start database", e);
             fail("Exception during database startup.");
         }
         try {
-            LOGGER.log(Level.INFO, "Building Hibernate EntityManager for unit tests");
+        	LOGGER.log(Level.INFO, "Building Hibernate EntityManager for unit tests");
             emFactory = Persistence.createEntityManagerFactory("testPU");
             em = emFactory.createEntityManager();
         } catch (Exception ex) {
@@ -50,7 +50,7 @@ LOGGER.log(Level.INFO, "Starting memory database for unit tests");
 
     @AfterClass
     public static void tearDown() throws Exception {
-        LOGGER.log(Level.INFO, "Shuting Hibernate JPA layer.");
+    	LOGGER.log(Level.INFO, "Shuting Hibernate JPA layer.");
         if (em != null) {
             em.close();
         }
@@ -72,22 +72,22 @@ LOGGER.log(Level.INFO, "Starting memory database for unit tests");
         try {
             em.getTransaction().begin();
 
-            FileItem file = new FileItem();
+            FileItemEntity file = new FileItemEntity();
             file.setId("myid");
             file.setName("Tagada");
             file.setLength(10);
             file.setMessage("this is a message");
             file.setOwner("miage");
             file.setType("text/plain");
-            file.setReceivers(new ArrayList<String>());
-
+            file.setReceivers(new ArrayList<String> ());
+            
             em.persist(file);
             assertTrue(em.contains(file));
-
-            FileItem file2 = em.find(FileItem.class, "myid");
+            
+            FileItemEntity file2 = em.find(FileItemEntity.class, "myid");
             assertNotNull(file2);
             assertEquals(file, file2);
-
+            
             assertEquals("Tagada", file2.getName());
             file2.setName("A new Name");
             List<String> receivers = new ArrayList<String>();
@@ -95,13 +95,13 @@ LOGGER.log(Level.INFO, "Starting memory database for unit tests");
             receivers.add("user2@test.com");
             file2.setReceivers(receivers);
             em.merge(file2);
-            FileItem file3 = em.find(FileItem.class, "myid");
+            FileItemEntity file3 = em.find(FileItemEntity.class, "myid");
             assertEquals("A new Name", file3.getName());
-
-            List<FileItem> items = em.createNamedQuery("listAllFiles", FileItem.class).getResultList();
+            
+            List<FileItemEntity> items = em.createNamedQuery("listAllFiles", FileItemEntity.class).getResultList();
             assertEquals(1, items.size());
-
-            FileItem file4 = new FileItem();
+            
+            FileItemEntity file4 = new FileItemEntity();
             file4.setId("myid2");
             file4.setName("Tagada2");
             file4.setLength(20);
@@ -113,14 +113,14 @@ LOGGER.log(Level.INFO, "Starting memory database for unit tests");
             receivers4.add("user3@test.com");
             file4.setReceivers(receivers4);
             em.persist(file4);
-
-            items = em.createNamedQuery("listAllFiles", FileItem.class).getResultList();
+            
+            items = em.createNamedQuery("listAllFiles", FileItemEntity.class).getResultList();
             assertEquals(2, items.size());
-
-            FileItem file5 = em.find(FileItem.class, "myid2");
+            
+            FileItemEntity file5 = em.find(FileItemEntity.class, "myid2");
             assertEquals(2, file5.getReceivers().size());
             for ( String receiver : file5.getReceivers() ) {
-                LOGGER.log(Level.INFO, "receiver: " + receiver);
+            	LOGGER.log(Level.INFO, "receiver: " + receiver);
             }
 
             em.getTransaction().commit();
@@ -131,6 +131,5 @@ LOGGER.log(Level.INFO, "Starting memory database for unit tests");
             fail("Exception during testPersistence");
         }
     }
-
 
 }

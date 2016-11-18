@@ -1,0 +1,32 @@
+----------------------------------------------------------------
+Wed Nov 16 18:11:58 CET 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-0158-6e1f-a9af-00000d419b80 
+on database directory memory:/Users/Alexandre/Desktop/M2 SID PROJECT/jayblanc-filestore/filestore-ejb/unit-testing-jpa with class loader sun.misc.Launcher$AppClassLoader@12a3a380 
+Loaded from file:/Users/Alexandre/.m2/repository/org/apache/derby/derby/10.11.1.1/derby-10.11.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_71-b15
+user.dir=/Users/Alexandre/Desktop/M2 SID PROJECT/jayblanc-filestore/filestore-ejb
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.12.1
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Wed Nov 16 18:12:00 CET 2016:
+Shutting down instance a816c00e-0158-6e1f-a9af-00000d419b80 on database directory memory:/Users/Alexandre/Desktop/M2 SID PROJECT/jayblanc-filestore/filestore-ejb/unit-testing-jpa with class loader sun.misc.Launcher$AppClassLoader@12a3a380 
+----------------------------------------------------------------
+Wed Nov 16 18:12:00 CET 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance 6ede40af-0158-6e1f-a9af-00000d419b80 
+on database directory memory:/Users/Alexandre/Desktop/M2 SID PROJECT/jayblanc-filestore/filestore-ejb/unit-testing-jpa with class loader sun.misc.Launcher$AppClassLoader@12a3a380 
+Loaded from file:/Users/Alexandre/.m2/repository/org/apache/derby/derby/10.11.1.1/derby-10.11.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_71-b15
+user.dir=/Users/Alexandre/Desktop/M2 SID PROJECT/jayblanc-filestore/filestore-ejb
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.12.1
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Wed Nov 16 18:12:00 CET 2016:
+Shutting down instance 6ede40af-0158-6e1f-a9af-00000d419b80 on database directory memory:/Users/Alexandre/Desktop/M2 SID PROJECT/jayblanc-filestore/filestore-ejb/unit-testing-jpa with class loader sun.misc.Launcher$AppClassLoader@12a3a380 

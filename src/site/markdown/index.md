@@ -1,4 +1,4 @@
-# Le projet de Miage M2 2015 : filestore
+# Le projet de Miage Rabat 2016 : filestore
 
 Le projet consiste à écrire une application de partage de fichier en ligne qui sera, à terme, hébergé dans le cloud.
 

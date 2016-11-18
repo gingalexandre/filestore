@@ -7,50 +7,45 @@
 	<name>The FileStore Application</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
- 	<organization>
-   	 <name>Miage Nancy</name>
-   	 <url>http://www.miage-nancy.fr</url>
-  	</organization>
-  	<developers>
-    	<developer>
-      		<id>gingalexandre</id>
-      		<name>Alexandre GINGEMBRE</name>
-      		<email>alexandre.gingembre5@etu.univ-lorraine.fr</email>
-      		<url>https://univ-lorraine.fr</url>
-      		<organization>UNIVERSITE DE LORRAINE</organization>
-      		<organizationUrl>http://www.univ-lorraine.fr</organizationUrl>
-      		<roles>
-        	 <role>architect</role>
-        	 <role>developer</role>
-      		</roles>
-     		<timezone>Europe/Paris</timezone>
-    	</developer>
-  	</developers>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
 		<version.compiler.plugin>3.3</version.compiler.plugin>
 		<version.surefire.plugin>2.18.1</version.surefire.plugin>
+		<version.docker.plugin>0.13.6</version.docker.plugin>
 		<version.ear.plugin>2.10.1</version.ear.plugin>
+		<version.jar.plugin>2.6</version.jar.plugin>
 		<version.ejb.plugin>2.5.1</version.ejb.plugin>
 		<version.war.plugin>2.6</version.war.plugin>
+		<version.dependency.plugin>2.10</version.dependency.plugin>
+		<version.jboss.resteasy>3.0.11.Final</version.jboss.resteasy>
 		<version.junit>4.12</version.junit>
-        <version.jmock>2.8.2</version.jmock>
+		<version.jmock>2.8.2</version.jmock>
 		<version.javaee>7.0</version.javaee>
+		<version.shrinkwrap>1.2.6</version.shrinkwrap>
+		<version.shrinkwrap-resolver>2.2.4</version.shrinkwrap-resolver>
+		<version.arquillian>1.1.11.Final</version.arquillian>
+		<version.wildfly-arquillian>2.0.0.Final</version.wildfly-arquillian>
+		<version.wildfly-client>10.1.0.Final</version.wildfly-client>
+		<version.commons-cli>1.3.1</version.commons-cli>
+		<version.onejar.plugin>1.4.4</version.onejar.plugin>
+		<version.jaxws.plugin>1.12</version.jaxws.plugin>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<maven.compiler.source>1.7</maven.compiler.source>
-        <version.shrinkwrap>1.2.6</version.shrinkwrap>
-        <version.shrinkwrap-resolver>2.2.4</version.shrinkwrap-resolver>
-        <version.arquillian>1.1.11.Final</version.arquillian>
-        <version.wildfly-arquillian>2.0.0.Final</version.wildfly-arquillian>
 	</properties>
 
+	<organization>
+		<name>Miage Nancy</name>
+		<url>http://www.miage-nancy.fr</url>
+	</organization>
+
 	<scm>
-		<connection>scm:git:git@github.com:gingalexandre/filestore.git</connection>
-		<developerConnection>scm:git:git@github.com:gingalexandre/filestore.git</developerConnection>
+		<connection>scm:git:git@bgithub.com:gingalexandre/filestore.git</connection>
+		<developerConnection>scm:git:git@bgithub.com:gingalexandre/filestore.git</developerConnection>
 		<url>https://github.com/gingalexandre/filestore</url>
 	</scm>
-	
+
 	<repositories>
 		<repository>
 			<id>filestore-maven-repository</id>
@@ -74,7 +69,23 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</pluginRepository>
+		<pluginRepository>
+			<id>onejar-maven-plugin.googlecode.com</id>
+			<url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
+		</pluginRepository>
 	</pluginRepositories>
+
+	<developers>
+		<developer>
+			<id>gingalexandre</id>
+			<name>Alexandre GINGEMBRE</name>
+			<email>alexandre.gingembre@sfr.fr</email>
+			<roles>
+				<role>student</role>
+			</roles>
+			<timezone>Europe/Paris</timezone>
+		</developer>
+	</developers>
 
 	<dependencyManagement>
 		<dependencies>
@@ -92,17 +103,33 @@
 			</dependency>
 			<dependency>
 				<groupId>fr.miage.gingalexandre</groupId>
+				<artifactId>filestore-api</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>fr.miage.gingalexandre</groupId>
 				<artifactId>filestore-ejb</artifactId>
 				<version>${project.version}</version>
 				<type>ejb</type>
-				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>fr.miage.gingalexandre</groupId>
 				<artifactId>filestore-web</artifactId>
 				<version>${project.version}</version>
 				<type>war</type>
-				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>fr.miage.gingalexandre</groupId>
+				<artifactId>filestore-ear</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>fr.miage.gingalexandre</groupId>
+				<artifactId>filestore-client</artifactId>
+				<version>${project.version}</version>
+				<type>app-client</type>
 			</dependency>
 			<dependency>
 				<groupId>junit</groupId>
@@ -113,38 +140,50 @@
 			<dependency>
 				<groupId>org.jmock</groupId>
 				<artifactId>jmock-junit4</artifactId>
-                <version>${version.jmock}</version>
-                <scope>test</scope>
+				<version>${version.jmock}</version>
+				<scope>test</scope>
 			</dependency>
-            <dependency>
-                <groupId>org.jboss.shrinkwrap</groupId>
-                <artifactId>shrinkwrap-bom</artifactId>
-                <version>${version.shrinkwrap}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.shrinkwrap.resolver</groupId>
-                <artifactId>shrinkwrap-resolver-bom</artifactId>
-                <version>${version.shrinkwrap-resolver}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${version.arquillian}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly.arquillian</groupId>
-                <artifactId>wildfly-arquillian-container-managed</artifactId>
-                <version>${version.wildfly-arquillian}</version>
-            </dependency>
+			<dependency>
+				<groupId>org.jboss.shrinkwrap</groupId>
+				<artifactId>shrinkwrap-bom</artifactId>
+				<version>${version.shrinkwrap}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.shrinkwrap.resolver</groupId>
+				<artifactId>shrinkwrap-resolver-bom</artifactId>
+				<version>${version.shrinkwrap-resolver}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>${version.arquillian}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.wildfly.arquillian</groupId>
+				<artifactId>wildfly-arquillian-container-managed</artifactId>
+				<version>${version.wildfly-arquillian}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wildfly</groupId>
+				<artifactId>wildfly-ejb-client-bom</artifactId>
+				<version>${version.wildfly-client}</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>commons-cli</groupId>
+				<artifactId>commons-cli</artifactId>
+				<version>${version.commons-cli}</version>
+				<type>jar</type>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
+
 	<distributionManagement>
 		<repository>
 			<id>filestore-maven-repository</id>
@@ -170,13 +209,25 @@
 						<skip>true</skip>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>jaxws-maven-plugin</artifactId>
+					<version>${version.jaxws.plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>com.jolira</groupId>
+					<artifactId>onejar-maven-plugin</artifactId>
+					<version>${version.onejar.plugin}</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
-
+	
 	<modules>
+		<module>filestore-api</module>
 		<module>filestore-ejb</module>
 		<module>filestore-web</module>
 		<module>filestore-ear</module>
+		<module>filestore-client</module>
 	</modules>
 </project>
