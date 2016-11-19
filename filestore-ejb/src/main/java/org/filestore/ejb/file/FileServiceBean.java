@@ -31,10 +31,9 @@ import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
-import javax.xml.ws.BindingType;
 import javax.xml.ws.soap.MTOM;
-import javax.xml.ws.soap.SOAPBinding;
 
+import org.filestore.api.FileData;
 import org.filestore.api.FileItem;
 import org.filestore.api.FileService;
 import org.filestore.api.FileServiceAdmin;
@@ -51,10 +50,9 @@ import org.jboss.ejb3.annotation.SecurityDomain;
 @Interceptors ({FileServiceMetricsBean.class})
 @SecurityDomain("filestore")
 @PermitAll
+@MTOM(enabled=true)
 @WebService(endpointInterface = "org.filestore.api.FileService")
 @HandlerChain(file="/handler-chain.xml")
-@MTOM(enabled=true)
-@BindingType(value = SOAPBinding.SOAP12HTTP_BINDING)
 public class FileServiceBean implements FileService, FileServiceLocal, FileServiceAdmin {
 	
 	private static final Logger LOGGER = Logger.getLogger(FileServiceBean.class.getName());
@@ -79,10 +77,10 @@ public class FileServiceBean implements FileService, FileServiceLocal, FileServi
 	
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public String postFile(String owner, List<String> receivers, String message, String name, DataHandler data) throws FileServiceException {
+	public String postFile(String owner, List<String> receivers, String message, String name, FileData data) throws FileServiceException {
 		LOGGER.log(Level.INFO, "Post File called (DataHandler)");
 		try {
-			return this.internalPostFile(owner, receivers, message, name, data.getInputStream());
+			return this.internalPostFile(owner, receivers, message, name, data.getData().getInputStream());
 		} catch (IOException e) {
 			throw new FileServiceException("error during posting file", e);
 		}

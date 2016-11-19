@@ -41,6 +41,7 @@
 					<extension>true</extension>
 					<packageName>org.filestore.ws.client</packageName>
 					<sourceDestDir>target/generated-sources</sourceDestDir>
+					<sei/>
 				</configuration>
 			</plugin>
 			<plugin>

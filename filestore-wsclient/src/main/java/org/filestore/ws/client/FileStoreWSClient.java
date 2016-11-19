@@ -1,10 +1,13 @@
 package org.filestore.ws.client;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.xml.ws.soap.MTOMFeature;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -35,10 +38,12 @@ public class FileStoreWSClient {
 		String[] receivers = cmd.getOptionValues("r");
 		Path path = Paths.get(cmd.getOptionValue("p"));
 
-		byte[] content = Files.readAllBytes(path);
+		FileData content = new FileData();
+		DataHandler data = new DataHandler(new FileDataSource(path.toFile()));
+		content.setData(data);
 		StringArray sareceivers = new StringArray();
 		sareceivers.item = Arrays.asList(receivers);
-		new FileServiceBeanService().getFileServiceBeanPort().postfile(sender, sareceivers, message, path.getFileName().toString(), content);
+		new FileServiceBeanService().getFileServiceBeanPort(new MTOMFeature(true, 100000)).postfile2(sender, sareceivers, message, path.getFileName().toString(), content);
 	}
 
 }

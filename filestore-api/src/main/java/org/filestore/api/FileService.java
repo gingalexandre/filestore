@@ -10,11 +10,9 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
-import javax.xml.ws.soap.MTOM;
 
 @Remote
 @WebService
-@MTOM(enabled=true)
 @SOAPBinding(style=Style.RPC)
 public interface FileService {
 	
@@ -22,7 +20,7 @@ public interface FileService {
 	public String postFile(@WebParam(name="owner") String owner, @WebParam(name="receivers") List<String> receivers, @WebParam(name="message") String message, @WebParam(name="filename") String name, @WebParam(name="filecontent") byte[] data) throws FileServiceException;
 	
 	@WebMethod(operationName="postfile2")
-	public String postFile(@WebParam(name="owner") String owner, @WebParam(name="receivers") List<String> receivers, @WebParam(name="message") String message, @WebParam(name="filename") String name, @WebParam(name="filedata") DataHandler data) throws FileServiceException;
+	public String postFile(@WebParam(name="owner") String owner, @WebParam(name="receivers") List<String> receivers, @WebParam(name="message") String message, @WebParam(name="filename") String name, @WebParam(name="filedata") FileData data) throws FileServiceException;
 	
 	@WebMethod(operationName="getfile")
 	@WebResult(name="fileitem")
