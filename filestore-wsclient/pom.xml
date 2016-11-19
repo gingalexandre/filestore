@@ -6,7 +6,7 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>fr.miage.jayblanc</groupId>
+		<groupId>fr.miage.gingalexandre</groupId>
 		<artifactId>filestore</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
@@ -41,7 +41,6 @@
 					<extension>true</extension>
 					<packageName>org.filestore.ws.client</packageName>
 					<sourceDestDir>target/generated-sources</sourceDestDir>
-					<sei/>
 				</configuration>
 			</plugin>
 			<plugin>

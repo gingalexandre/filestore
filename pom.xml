@@ -41,9 +41,8 @@
 	</organization>
 
 	<scm>
-		<connection>scm:git:git@bgithub.com:gingalexandre/filestore.git</connection>
-		<developerConnection>scm:git:git@bgithub.com:gingalexandre/filestore.git</developerConnection>
-		<url>https://github.com/gingalexandre/filestore</url>
+		<connection>scm:git:git@github..com:gingalexandre/filestore.git</connection>
+		<developerConnection>scm:git:git@github..com:gingalexandre/filestore.git</developerConnection>
 	</scm>
 
 	<repositories>
@@ -77,11 +76,11 @@
 
 	<developers>
 		<developer>
-			<id>gingalexandre</id>
+			<id>jayblanc</id>
 			<name>Alexandre GINGEMBRE</name>
 			<email>alexandre.gingembre@sfr.fr</email>
 			<roles>
-				<role>student</role>
+				<role>Student</role>
 			</roles>
 			<timezone>Europe/Paris</timezone>
 		</developer>

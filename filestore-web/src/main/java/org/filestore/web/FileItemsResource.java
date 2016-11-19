@@ -1,14 +1,5 @@
 package org.filestore.web;
 
-import org.filestore.api.*;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-
-import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -19,6 +10,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.filestore.api.FileItem;
+import org.filestore.api.FileService;
+import org.filestore.api.FileServiceAdmin;
+import org.filestore.api.FileServiceException;
+import org.filestore.api.FileServiceLocal;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 @Path("/files")
 @RequestScoped
@@ -100,7 +111,6 @@ public class FileItemsResource {
 	
 	@GET
 	@Path("/{key}/download")
-	@Produces({ MediaType.APPLICATION_OCTET_STREAM })
 	public Response getFileData(@PathParam("key") String key) throws FileServiceException, UnsupportedEncodingException {
 		LOGGER.log(Level.INFO, "GET /files/" + key + "/download");
 		FileItem item = fileService.getFile(key);
